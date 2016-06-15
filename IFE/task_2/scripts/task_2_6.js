@@ -10,21 +10,22 @@ function createDiv(num) {
 
 function renderOutput() {
 	var output = document.getElementById('output');
+	output.innerHTML = '';
 	divs.forEach(function(div) {
 		output.appendChild(div);
 		div.addEventListener('click', function(event){
 			var divClicked = event.target;
-			divs.fitter(function(ele) {
+			divs = divs.filter(function(ele) {
 				return ele != divClicked;
 			});
+			renderOutput();
 		}, false);
-		renderOutput();
 	});
 }
 
 function unshift(event) {
 	var num = document.getElementById('input').value;
-	if(typeof num  === 'number') {
+	if(parseInt(num, 10) == num) {
 		var div = createDiv(num);
 		divs.unshift(div);
 		renderOutput();
@@ -35,7 +36,7 @@ function unshift(event) {
 
 function push(event) {
 	var num = document.getElementById('input').value;
-	if(typeof num  === 'number') {
+	if(parseInt(num, 10) == num) {
 		var div = createDiv(num);
 		divs.push(div);
 		renderOutput();
@@ -47,10 +48,8 @@ function push(event) {
 function shift(event) {
 	if(divs.length === 0) {
 		alert("已经全部删完啦！");
-	}else {	
-		var output = document.getElementById('output');
-		var div = output.firstChild;
-		divs.unshift(div);
+	}else {
+		divs.shift();
 		renderOutput();
 	}
 }
@@ -58,10 +57,8 @@ function shift(event) {
 function pop(event) {
 	if(divs.length === 0) {
 		alert("已经全部删完啦！");
-	}else {	
-		var output = document.getElementById('output');
-		var div = output.firstChild;
-		divs.pop(div);
+	}else {
+		divs.pop();
 		renderOutput();
 	}
 }

@@ -36,12 +36,12 @@ function cut(event) {
 		alert("已经全部删完啦！");
 	}else {
 		if(event.target === document.getElementById('shift')) {
-			divs.shift();
+			var div = divs.shift();
 		}else if(event.target === document.getElementById('pop')) {
-			divs.pop();
+			var div = divs.pop();
 		}
+		alert(div.innerHTML);
 		renderOutput();
-		return;
 	}
 }
 

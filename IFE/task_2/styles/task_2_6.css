@@ -1,6 +1,7 @@
 .num {
 	display: inline-block;
 	background-color: #00FA9A;
-	padding: 15px;
-	margin-right: 5px;
+	padding: 7px;
+	margin-right: 3px;
+	border: solid 1px;
 }

@@ -50,20 +50,18 @@ function sort() {
     	function queue() {
         	if(divs[j].num > divs[j + 1].num) {
         		timer = 50;
-            	divs[j].setAttribute('class', 'current');
-            	tempExchangVal = divs[j];
-            	divs[j] = divs[j + 1];
-            	divs[j + 1] = tempExchangVal;
-            	renderOutput();
+            		tempExchangVal = divs[j];
+            		divs[j] = divs[j + 1];
+            		divs[j + 1] = tempExchangVal;
+            		renderOutput();
         	}
         	j += 1;
     		if(j >= i-1) {
-            	i -= 1;
-        		divs[j].setAttribute('class', 'num');
-            	j = 0;
-            	if(i === 0) {
-            		return true;
-            	}
+            		i -= 1;
+            		j = 0;
+            		if(i === 0) {
+            			return true;
+            		}
         	}
         	timer = timer || 0;
         	setTimeout(queue, timer);

@@ -1,18 +1,5 @@
 var divs = [];
 
-function createDiv() {
-	divs = [];
-	for (var i = 0; i < 60; i++) {
-		var div = document.createElement('div');
-	   	div.num = Math.floor(Math.random() * 91 + 9);
-		div.setAttribute("class", "num");
-		div.setAttribute("title", div.num);
-		div.setAttribute("style", 'padding-top:' + 2*div.num + 'px; padding-bottom:' + 2*div.num + 'px');
-		divs.push(div);
-	};
-	renderOutput();
-}
-
 function renderOutput() {
 	var output = document.getElementById('output');
 	output.innerHTML = '';
@@ -97,7 +84,18 @@ function sort() {
 }
 
 (function () {
-	createDiv();
+	(function () {
+		divs = [];
+		for (var i = 0; i < 60; i++) {
+			var div = document.createElement('div');
+		   	div.num = Math.floor(Math.random() * 91 + 9);
+			div.setAttribute("class", "num");
+			div.setAttribute("title", div.num);
+			div.setAttribute("style", 'padding-top:' + 2*div.num + 'px; padding-bottom:' + 2*div.num + 'px');
+			divs.push(div);
+		};
+		renderOutput();
+	})();
 	document.getElementById('unshift').addEventListener('click', push, false);
 	document.getElementById('push').addEventListener('click', push, false);
 	document.getElementById('shift').addEventListener('click', cut, false);

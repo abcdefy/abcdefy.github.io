@@ -1,5 +1,18 @@
 var divs = [];
 
+function createDiv() {
+	divs = [];
+	for (var i = 0; i < 60; i++) {
+		var div = document.createElement('div');
+	   	div.num = Math.floor(Math.random() * 91 + 9);
+		div.setAttribute("class", "num");
+		div.setAttribute("title", div.num);
+		div.setAttribute("style", 'padding-top:' + 2*div.num + 'px; padding-bottom:' + 2*div.num + 'px');
+		divs.push(div);
+	};
+	renderOutput();
+}
+
 function renderOutput() {
 	var output = document.getElementById('output');
 	output.innerHTML = '';
@@ -45,46 +58,48 @@ function cut(event) {
 }
 function sort() {
 	return function bubbleSort() {
-    		var i = divs.length;
-   		var j = 0, delay, tempExchangVal;
-    		function queue() {
-        		if(divs[j].num <= divs[j + 1].num) {
-        			delay = false;
-        			divs[j].setAttribute('class', 'num');
-        		}
-        		if(divs[j].num > divs[j + 1].num) {
-        			delay = true;
-            			divs[j].setAttribute('class', 'current');
-            			tempExchangVal = divs[j];
-            			divs[j] = divs[j + 1];
-            			divs[j + 1] = tempExchangVal;
-            			renderOutput();
-        		}
-        		j += 1;
-    			if(j >= i-1) {
-            			i -= 1;
-        			divs[j].setAttribute('class', 'num');
-            			j = 0;
-            			if(i === 0) {
-            				return true;
-            			}
-        		}
-        		if(delay) {
-        			setTimeout(queue, 50);
-        		}else{
-        			queue();
-        		}
-    		}
-    		queue();
+    	var i = divs.length
+   		   ,j = 0
+   		   ,delay, tempExchangVal;
+    	function queue() {
+        	if(divs[j].num <= divs[j + 1].num) {
+        		delay = false;
+        		divs[j].setAttribute('class', 'num');
+        	}
+        	if(divs[j].num > divs[j + 1].num) {
+        		delay = true;
+            	divs[j].setAttribute('class', 'current');
+            	tempExchangVal = divs[j];
+            	divs[j] = divs[j + 1];
+            	divs[j + 1] = tempExchangVal;
+            	renderOutput();
+        	}
+        	j += 1;
+    		if(j >= i-1) {
+        		divs[j].setAttribute('class', 'num');
+            	j = 0;
+            	i -= 1;
+            	if(i === 0) {
+            		return true;
+            	}
+        	}
+        	if(delay) {
+        		setTimeout(queue, 20);
+        	}else{
+        		queue();
+        	}
+    	}
+    	queue();
 	}
 }
 
 (function () {
-	document.getElementById('unshift').addEventListener('click', push, true);
-	document.getElementById('push').addEventListener('click', push, true);
-	document.getElementById('shift').addEventListener('click', cut, true);
-	document.getElementById('pop').addEventListener('click', cut, true);
-	document.getElementById('sort').addEventListener('click', sort(), true)
+	createDiv();
+	document.getElementById('unshift').addEventListener('click', push, false);
+	document.getElementById('push').addEventListener('click', push, false);
+	document.getElementById('shift').addEventListener('click', cut, false);
+	document.getElementById('pop').addEventListener('click', cut, false);
+	document.getElementById('sort').addEventListener('click', sort(), false)
 	document.getElementById('output').addEventListener('click', function(event) {
 		divs = divs.filter(function(ele) {
 			return ele !== event.target;

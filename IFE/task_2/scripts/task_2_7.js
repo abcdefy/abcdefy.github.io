@@ -49,7 +49,7 @@ function sort() {
    	   ,j = 0
    	   ,delay, tempExchangVal;
    	divs.in_animation = true;
-   	function queue() {
+   	(function() {
    		if(divs[j].num <= divs[j + 1].num) {
    			delay = false;
    			divs[j].setAttribute('class', 'num');	
@@ -73,12 +73,11 @@ function sort() {
    			}
    		}
    		if(delay) {
-   			setTimeout(queue, 10);
+   			setTimeout(arguments.callee, 10);
    		}else{
-   			queue();
+   			arguments.callee();
    		}	
-   	}
-   	queue();
+   	})();
 }
 
 (function () {

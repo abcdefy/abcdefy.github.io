@@ -45,42 +45,40 @@ function cut(e) {
 	}
 }
 function sort() {
-	return function bubbleSort() {
-    	var i = divs.length
-   		   ,j = 0
-   		   ,delay, tempExchangVal;
-   		divs.in_animation = true;
-    	function queue() {
-        	if(divs[j].num <= divs[j + 1].num) {
-        		delay = false;
-        		divs[j].setAttribute('class', 'num');
-        	}
-        	if(divs[j].num > divs[j + 1].num) {
-        		delay = true;
-            	divs[j].setAttribute('class', 'current');
-            	tempExchangVal = divs[j];
-            	divs[j] = divs[j + 1];
-            	divs[j + 1] = tempExchangVal;
-            	renderOutput();
-        	}
-        	j += 1;
-    		if(j >= i-1) {
-        		divs[j].setAttribute('class', 'num');
-            	j = 0;
-            	i -= 1;
-            	if(i === 0) {
-            		divs.in_animation = false;
-            		return true;
-            	}
-        	}
-        	if(delay) {
-        		setTimeout(queue, 20);
-        	}else{
-        		queue();
-        	}
-    	}
-    	queue();
-	}
+	var i = divs.length
+   	   ,j = 0
+   	   ,delay, tempExchangVal;
+   	divs.in_animation = true;
+   	function queue() {
+   		if(divs[j].num <= divs[j + 1].num) {
+   			delay = false;
+   			divs[j].setAttribute('class', 'num');	
+   		}
+   		if(divs[j].num > divs[j + 1].num) {
+   			delay = true;
+   			divs[j].setAttribute('class', 'current');
+   			tempExchangVal = divs[j];
+   			divs[j] = divs[j + 1];
+   			divs[j + 1] = tempExchangVal;
+   			renderOutput();
+   		}
+   		j += 1;
+   		if(j >= i-1) {
+   			divs[j].setAttribute('class', 'num');
+   			j = 0;
+   			i -= 1;
+   			if(i === 0) {
+   				divs.in_animation = false;
+   				return true;	
+   			}
+   		}
+   		if(delay) {
+   			setTimeout(queue, 10);
+   		}else{
+   			queue();
+   		}	
+   	}
+   	queue();
 }
 
 (function () {
@@ -100,7 +98,7 @@ function sort() {
 	document.getElementById('push').addEventListener('click', push, false);
 	document.getElementById('shift').addEventListener('click', cut, false);
 	document.getElementById('pop').addEventListener('click', cut, false);
-	document.getElementById('sort').addEventListener('click', sort(), false)
+	document.getElementById('sort').addEventListener('click', sort, false)
 	document.getElementById('output').addEventListener('click', function(e) {
 		if (divs.in_animation) {
 			alert('手不要滑！！')

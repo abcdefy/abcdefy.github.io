@@ -1,14 +1,13 @@
 var application = function() {
 	var hobbys = [], tags = [];
 
-	function createDiv(item) {
-		var div = document.createElement('div');
-		div.innerHTML = item;
-		div.setAttribute("class", "num");
-		return div;
-	}
-
 	function renderOutput(label, pos) {
+		function createDiv(item) {
+			var div = document.createElement('div');
+			div.innerHTML = item;
+			div.setAttribute("class", "num");
+			return div;
+		}
 		var output = document.getElementById(pos);
 		output.innerHTML = '';
 		label.forEach(item => output.appendChild(createDiv(item)));
@@ -49,4 +48,11 @@ var application = function() {
 (function () {
 	document.getElementById('tag_box').addEventListener('keyup', application.tagSet, true);
 	document.getElementById('check').addEventListener('click', application.hobbySet, true);
+	document.getElementById('tag_output').addEventListener('mouseover', function(e) {
+		var target = e.target;
+		if (target.getAttribute('class') === 'num') {
+			target.setAttribute('class', 'current');	
+			target.addEventListener('mouseout', e => e.target.setAttribute('class', 'num'), false);
+		}
+	}, false);
 })();

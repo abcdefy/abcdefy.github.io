@@ -1,4 +1,4 @@
-.num {
+.num, .current {
 	display: inline-block;
 	background-color: #00FA9A;
 	border: solid 1px;
@@ -6,6 +6,11 @@
 	padding: 3px;
 }
 
-.num:hover {
+.current {
 	background-color: firebrick;
 }
+
+
+.current:before {
+	content: '点击删除：';
+};

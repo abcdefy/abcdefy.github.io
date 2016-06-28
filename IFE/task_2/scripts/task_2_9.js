@@ -41,6 +41,11 @@ var application = function() {
 				tags = push(tags, divs);
 				renderOutput(tags, 'tag_output');
 			}
+		},
+
+		del : function(div) {
+			tags = tags.filter(item => item !== div.innerHTML);
+			renderOutput(tags, 'tag_output');
 		}
 	};
 }();
@@ -52,7 +57,8 @@ var application = function() {
 		var target = e.target;
 		if (target.getAttribute('class') === 'num') {
 			target.setAttribute('class', 'current');	
-			target.addEventListener('mouseout', e => e.target.setAttribute('class', 'num'), false);
+			target.addEventListener('mouseout', e => e.target.setAttribute('class', 'num'), true);
+			target.addEventListener('click', e => application.del(e.target), true);
 		}
 	}, false);
 })();

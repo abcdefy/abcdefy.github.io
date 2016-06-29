@@ -1,0 +1,16 @@
+div {
+	display: flex;
+	padding: 10px;
+	border: 1px solid black;
+	justify-content: space-between;
+	margin: 10px;
+	background-color: white;
+}
+
+#root {
+	width: 590px;
+}
+
+.current {
+	background-color: red;
+}

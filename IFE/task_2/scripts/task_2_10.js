@@ -22,6 +22,7 @@ var order = function() {
 		stop: function() {
 			clearTimeout(this.timerId);
 			this.timerId = 0;
+			this.queue = [];
 			var divs = document.getElementsByTagName('div');
 			[].forEach.call(divs, e => e.style = 'background-color: white');
 		}

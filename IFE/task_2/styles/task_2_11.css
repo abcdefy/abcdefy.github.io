@@ -10,3 +10,8 @@ div {
 #root {
 	width: 1250px;
 }
+
+#charge {
+	display: inline-block;
+	border: none;
+}

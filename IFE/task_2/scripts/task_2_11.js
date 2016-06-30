@@ -1,4 +1,4 @@
-var order = function() {
+var tree = function() {
 	var root = document.getElementById('root');
 	var timer = {
 		timerId: 0,
@@ -26,14 +26,14 @@ var order = function() {
 			this.queue.forEach.call(divs, e => e.style = 'background-color: white');
 		}
 	};
-	function traverseDF(node, fn) {
+	function traverseDF(fn) {
 		(function traverse(currentNode) {
 			timer.queue.forEach.call(currentNode.children, e => traverse(e));
 			fn(currentNode);
-		})(node);
+		})(root);
 	}
-	function traverseBF(node, fn) {
-		var currentNode = node,
+	function traverseBF(fn) {
+		var currentNode = root,
 			array = [];
 		while(currentNode) {
 			if(currentNode.children) array.push(...currentNode.children);
@@ -41,24 +41,40 @@ var order = function() {
 			currentNode = array.shift();
 		}
 	}
+	function choose(fn) {
+		var type = document.getElementsByTagName('select')[0].value;
+		if(type === 'traverseBF') {
+			traverseBF(fn);
+		}else if(type === 'traverseDF') {
+			traverseDF(fn);
+		}
+	}
 	return {
-		show: function(str) {
+		show: function() {
 			timer.stop();
-			switch (str) {
-				case 'traverseDF':
-					traverseDF(root, timer.add.bind(timer));
-					break;
-				case 'traverseBF':
-					traverseBF(root, timer.add.bind(timer));
-					break;
-				default:
-					return false;
+			choose(timer.add.bind(timer));
+			timer.fire();
+		},
+		contains: function(date) {
+			var i;
+			timer.stop();
+			choose(timer.add.bind(timer));
+			i = timer.queue.findIndex(e => e.innerText.match(/\S+/).join() === date);
+			if(i === -1) {
+				alert('search failed！')
+				return false;
 			}
+			timer.queue = timer.queue.slice(0, i + 1);
 			timer.fire();
 		}
 	};
 }();
 
 (function() {
-	document.getElementById('charge').addEventListener('click', e => order.show(e.target.value), false);
+	document.getElementById('charge').addEventListener('click', e => {
+		var b = e.target;
+		if(b.type !== 'button') return false;
+		if(b.value === 'show') tree.show();
+		if(b.value === 'contains') tree.contains(document.getElementsByTagName('input')[0].value);
+	}, false);
 })();

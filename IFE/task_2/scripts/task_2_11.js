@@ -13,17 +13,17 @@ var tree = function() {
 				if (timer.queue.length > 0) {
 					if (timer.queue[0]()) timer.queue.shift();
 					timer.timerId = setTimeout(arguments.callee, 350);
-				}
+				};
 			})();
-		},
-		stop: function() {
-			clearTimeout(this.timerId);
-			this.timerId = 0;
-			queue = [];
-			var divs = document.getElementsByTagName('div');
-			this.queue.forEach.call(divs, e => e.style = 'background-color: white');
 		}
 	};
+	function stop() {
+		clearTimeout(timer.timerId);
+		timer.timerId = 0;
+		queue = [];
+		var divs = document.getElementsByTagName('div');
+		queue.forEach.call(divs, e => e.style = 'background-color: white');
+	}
 	function traverseAni() {
 		if (current) current.style = 'background-color: white';
 		current = queue.shift();
@@ -33,14 +33,14 @@ var tree = function() {
 		}
 		return true;
 	}
-	function traverseDF() {
+	function traverseDF(node) {
 		(function traverse(currentNode) {
 			queue.forEach.call(currentNode.children, e => traverse(e));
 			queue.push(currentNode);
-		})(root);
+		})(node);
 	}
-	function traverseBF() {
-		var currentNode = root,
+	function traverseBF(node) {
+		var currentNode = node,
 			array = [];
 		while(currentNode) {
 			if (currentNode.children) array.push(...currentNode.children);
@@ -48,44 +48,63 @@ var tree = function() {
 			currentNode = array.shift();
 		}
 	}
-	function choose(fn) {
+	function choose(node) {
 		var type = document.getElementsByTagName('select')[0].value;
 		if (type === 'traverseBF') {
-			traverseBF();
+			traverseBF(node);
 		}else if (type === 'traverseDF') {
-			traverseDF();
+			traverseDF(node);
 		}
 	}
 	return {
 		show: function() {
-			timer.stop();
-			choose();
+			stop();
+			choose(root);
 			timer.add(traverseAni);
 			timer.fire();
 		},
 		contains: function(date) {
-			var i;
-			timer.stop();
-			choose();
-			i = queue.findIndex(e => e.innerText.match(/\S+/).join() === date);
-			if (i === -1) {
-				alert('Search failed！');
-				return false;
-			}
-			queue = queue.slice(0, i + 1);
-			i = queue[i];
-			timer.add(traverseAni);
-			timer.add(e => i.style = 'background-color: firebrick');
+			stop();
+			choose(root);
+			queue.reduce( ( i, j ) => {
+				timer.add(function() {
+					i.style.backgroundColor = i.style.backgroundColor === 'firebrick' ? 'firebrick' : 'white';
+					j.style.backgroundColor = j.innerText.match(/\S+/).join() === date ? 'firebrick' : 'mediumspringgreen';
+					return true;
+				});
+				return j;
+			}, root )
+			timer.add(function() {
+				queue[queue.length-1].style.backgroundColor = queue[queue.length-1].style.backgroundColor === 'firebrick' ? 'firebrick' : 'white';
+				return true;
+			} );
 			timer.fire();
+		},
+		cut: function(node) {
+			stop();
+			node.remove();
+		},
+		add: function(node, date) {
+			var div = document.createElement('div');
+			div.appendChild(document.createTextNode(date));
+			node.appendChild(document.createElement('div'));
 		}
 	};
 }();
 
 (function() {
+	var current = null;
 	document.getElementById('charge').addEventListener('click', e => {
-		var b = e.target;
+		var b = e.target, v = b.value;
 		if (b.type !== 'button') return false;
-		if (b.value === 'show') tree.show();
-		if (b.value === 'contains') tree.contains(document.getElementsByTagName('input')[0].value);
+		if (v === 'show') tree.show();
+		if (v === 'contains') tree.contains(document.getElementsByTagName('input')[0].value);
+		if (v === 'cut' && current) { tree.cut(current) };
+		if (v === 'add') { tree.add(current, document.getElementsByTagName('input')[1].value)};
 	}, false);
+	document.getElementById('root').addEventListener('click', e => {
+		if (current) { current.style.backgroundColor = 'white' };
+		e.target.style.backgroundColor = 'firebrick';
+		current = e.target;
+	}, false)
 })();

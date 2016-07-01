@@ -13,7 +13,7 @@ var tree = function() {
 				if (timer.queue.length > 0) {
 					if (timer.queue[0]()) timer.queue.shift();
 					timer.timerId = setTimeout(arguments.callee, 350);
-				};
+				}
 			})();
 		},
 		stop: function() {
@@ -29,7 +29,6 @@ var tree = function() {
 		current = queue.shift();
 		if (current) {
 			current.style = 'background-color: mediumspringgreen';
-			div = current;
 			return false;
 		}
 		return true;
@@ -70,7 +69,7 @@ var tree = function() {
 			choose();
 			i = queue.findIndex(e => e.innerText.match(/\S+/).join() === date);
 			if (i === -1) {
-				alert('Search failed！')
+				alert('Search failed！');
 				return false;
 			}
 			queue = queue.slice(0, i + 1);

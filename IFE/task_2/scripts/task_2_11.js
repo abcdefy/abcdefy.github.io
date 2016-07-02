@@ -1,6 +1,5 @@
 var tree = function() {
 	var root = document.getElementById('root'),
-		current,
 		queue = [];
 	var timer = {
 		timerId: 0,
@@ -12,8 +11,8 @@ var tree = function() {
 			(function() {
 				if (timer.queue.length > 0) {
 					if (timer.queue[0]()) timer.queue.shift();
-					timer.timerId = setTimeout(arguments.callee, 350);
-				};
+					timer.timerId = setTimeout(arguments.callee, 300);
+				}
 			})();
 		}
 	};
@@ -21,17 +20,9 @@ var tree = function() {
 		clearTimeout(timer.timerId);
 		timer.timerId = 0;
 		queue = [];
+		timer.queue = [];
 		var divs = document.getElementsByTagName('div');
 		queue.forEach.call(divs, e => e.style = 'background-color: white');
-	}
-	function traverseAni() {
-		if (current) current.style = 'background-color: white';
-		current = queue.shift();
-		if (current) {
-			current.style = 'background-color: mediumspringgreen';
-			return false;
-		}
-		return true;
 	}
 	function traverseDF(node) {
 		(function traverse(currentNode) {
@@ -60,25 +51,31 @@ var tree = function() {
 		show: function() {
 			stop();
 			choose(root);
-			timer.add(traverseAni);
+			queue.push(queue[queue.length - 1]);
+			queue.forEach( (i, index, array) => {
+				timer.add(function() {
+					i.style.backgroundColor = 'mediumspringgreen';
+					if (array[index - 1]) { array[index - 1].style.backgroundColor = 'white'; };
+					return true;
+				});
+			});
 			timer.fire();
 		},
 		contains: function(date) {
 			stop();
 			choose(root);
-			queue.reduce( ( i, j ) => {
+			queue.push(queue[queue.length - 1]);
+			queue.forEach( (i, index, array) => {
 				timer.add(function() {
-					i.style.backgroundColor = i.style.backgroundColor === 'firebrick' ? 'firebrick' : 'white';
-					j.style.backgroundColor = j.innerText.match(/\S+/).join() === date ? 'firebrick' : 'mediumspringgreen';
+					i.style.backgroundColor = i.innerText.match(/\S+/).join() === date ? 'firebrick' : 'mediumspringgreen';
+					if (array[index - 1]) { array[index - 1].style.backgroundColor = array[index - 1].style.backgroundColor === 'firebrick' ? 'firebrick' : 'white'; }
 					return true;
 				});
-				return j;
-			}, root )
-			timer.add(function() {
-				queue[queue.length-1].style.backgroundColor = queue[queue.length-1].style.backgroundColor === 'firebrick' ? 'firebrick' : 'white';
-				return true;
-			} );
+			});
 			timer.fire();
+		},
+		reset: function() {
+			stop();
 		},
 		cut: function(node) {
 			stop();
@@ -87,7 +84,7 @@ var tree = function() {
 		add: function(node, date) {
 			var div = document.createElement('div');
 			div.appendChild(document.createTextNode(date));
-			node.appendChild(document.createElement('div'));
+			node.appendChild(div);
 		}
 	};
 }();
@@ -96,15 +93,15 @@ var tree = function() {
 	var current = null;
 	document.getElementById('charge').addEventListener('click', e => {
 		var b = e.target, v = b.value;
-		if (b.type !== 'button') return false;
-		if (v === 'show') tree.show();
-		if (v === 'contains') tree.contains(document.getElementsByTagName('input')[0].value);
-		if (v === 'cut' && current) { tree.cut(current) };
-		if (v === 'add') { tree.add(current, document.getElementsByTagName('input')[1].value)};
+		if (b.type !== 'button') { return false; }
+		if (v === 'show') { tree.show(); }
+		if (v === 'contains') { tree.contains(document.getElementsByTagName('input')[0].value); }
+		if (v === 'cut' && current) { tree.cut(current); }
+		if (v === 'add') { tree.add(current, document.getElementsByTagName('input')[1].value); }
 	}, false);
 	document.getElementById('root').addEventListener('click', e => {
-		if (current) { current.style.backgroundColor = 'white' };
+		tree.reset();
 		e.target.style.backgroundColor = 'firebrick';
 		current = e.target;
-	}, false)
+	}, false);
 })();

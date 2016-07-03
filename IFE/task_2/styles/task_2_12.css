@@ -1,0 +1,25 @@
+div {
+	padding-right: 5px;
+	margin-left: 15px;
+}
+
+#root{
+	margin-right: 5px;
+	border: 0px;
+	display: block;
+}
+
+#warp {
+	padding: 10px 0px;
+	border-left: 3px solid mediumspringgreen;
+	display: inline-flex;
+}
+
+#charge {
+	border: none;
+	display: inline-block;
+}
+
+.hidden {
+	display: none;
+}

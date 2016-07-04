@@ -38,6 +38,7 @@ var tree = function(node) {
 			[].forEach.call( clickedNode.children, node => node.className = '' );
 		} else {
 			tree.traverseBF(clickedNode, node => node.className ='hidden');
+			clickedNode.className = '';
 		}
 	}
 

@@ -1,34 +1,10 @@
 var tree = function(node) {
 	var root = node;
-	var timer = {
-		timerId: 0,
-		queue: [],
-		add: function(fn) {
-			this.queue.push(fn);
-		},
-		fire: function() {
-			(function() {
-				if (timer.queue.length > 0) {
-					if (timer.queue[0]()) {
-						timer.queue.shift();
-						arguments.callee();
-					}else {
-						timer.timerId = setTimeout(arguments.callee, 300);
-					}
-				}
-			})();
-		}
-	};
-	function stop() {
-		clearTimeout(timer.timerId);
-		timer.timerId = 0;
-		timer.queue = [];
-	}
 	return {
 		traverseBF: function(node, fn) {
 			var currentNode = node,
 				array = [];
-			while(currentNode) {
+			while (currentNode) {
 				if (currentNode.children) array.push(...currentNode.children);
 				fn(currentNode);
 				currentNode = array.shift();
@@ -36,12 +12,11 @@ var tree = function(node) {
 		},
 		traverseDF: function(node, fn) {
 			(function traverse(currentNode) {
-				timer.queue.forEach.call( currentNode.children, e => traverse(e) );
+				[].forEach.call( currentNode.children, e => traverse(e) );
 				fn(currentNode);
 			})(node);
 		},
 		cut: function(node) {
-			stop();
 			node.remove();
 		},
 		add: function(node, date) {
@@ -55,14 +30,35 @@ var tree = function(node) {
 (function() {
 	var root = document.getElementById('root');
 	tree.traverseDF( root, node => node.classList.add('hidden') );
-	root.addEventListener('click', e => {
-		var clickedNode = e.target;
-		if(!clickedNode.children[0]) return false;
+
+	function expand(e) {
+		var clickedNode = e.target || e;
+		if (!clickedNode.children[0]) return false;
 		if (/hidden/.test(clickedNode.children[0].className)) {
-			[].forEach.call( clickedNode.children, node => node.classList.remove('hidden') );
+			[].forEach.call( clickedNode.children, node => node.className = '' );
 		} else {
-			tree.traverseBF(clickedNode, node => node.className = 'hidden');
-			clickedNode.className = '';
+			tree.traverseBF(clickedNode, node => node.className ='hidden');
 		}
-	});
+	}
+
+	function search(e) {
+		var data = document.getElementsByTagName('input')[0].value;
+		tree.traverseBF(root, node => node.className ='hidden');
+		tree.traverseBF(root, function(node) {
+			if ( node.innerText.match(/\S+/).join() === data ) {
+				node.style.color = 'firebrick';
+				(function() {
+					if ( node !== root ) {
+						node = node.parentElement;
+						[].forEach.call( node.children, node => node.className ='' );
+						arguments.callee();
+					}
+				})();
+			}
+			node.style.color = 'black';
+		});
+	}
+
+	root.addEventListener('click', expand, false);
+	document.getElementsByTagName('button')[0].addEventListener('click', search);
 })();

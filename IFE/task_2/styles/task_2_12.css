@@ -24,3 +24,11 @@ div {
 .hidden {
 	display: none;
 }
+
+.before1:before {
+	content: "> ";
+}
+
+.before2:before {
+	content: "∨ ";
+}

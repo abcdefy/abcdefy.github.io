@@ -1,0 +1,21 @@
+.hidden {
+  display: none;
+}
+
+#warp  {
+  display: inline-block;
+}
+
+li {
+  list-style: none;
+  font-size: 29px;
+}
+
+.parents {
+  list-style: square outside url('../images/add.png');
+}
+
+.parente {
+  list-style: square outside url('../images/remove.png');
+}
+
